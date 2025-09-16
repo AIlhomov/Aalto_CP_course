@@ -1,32 +1,24 @@
 # A Naive recursive implementation of LCS problem
+def solve(word1, word2):
+    cache = [[float('inf')] * (len(word2) + 1) for i in range(len(word1) + 1)]
 
-# Returns length of LCS for s1[0..m-1], s2[0..n-1]
-def lcsRec(s1, s2, m, n):
-  
-    # Base case: If either string is empty, the length of LCS is 0
-    if m == 0 or n == 0:
-        return 0
+    #base cases. in the 2D matrix (bottoms and WHOLE sides)
+    for j in range(len(word2) + 1):
+        cache[len(word1)][j] = len(word2) - j
+    for i in range(len(word1) + 1):
+        cache[i][len(word2)] = len(word1) - i
+    
+    #bottom up dp approach
+    for i in range(len(word1) - 1, -1, -1):
+        for j in range(len(word2) -1, -1, -1):
+            if word1[i] == word2[j]:
+                cache[i][j] = cache[i+1][j+1]
+            else:
+                #insert, delete, replace
+                cache[i][j] = 1 + min(cache[i+1][j], cache[i][j+1], cache[i+1][j+1])
+    return cache[0][0]
 
-    # If the last characters of both substrings match
-    if s1[m - 1] == s2[n - 1]:
+word1 = input()
+word2 = input()
 
-        # Include this character in LCS and recur for remaining substrings
-        return 1 + lcsRec(s1, s2, m - 1, n - 1)
-
-    else:
-        # If the last characters do not match
-        # Recur for two cases:
-        # 1. Exclude the last character of S1 
-        # 2. Exclude the last character of S2 
-        # Take the maximum of these two recursive calls
-        return max(lcsRec(s1, s2, m, n - 1), lcsRec(s1, s2, m - 1, n))
-
-def lcs(s1,s2):
-    m = len(s1)
-    n = len(s2)
-    return lcsRec(s1,s2,m,n)
-
-if __name__ == "__main__":
-    s1 = input()
-    s2 = input()
-    print(lcs(s1, s2))
+print(solve(word1, word2))
