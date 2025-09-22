@@ -1,6 +1,7 @@
 /.vscode
 #Binary cpp
 training/dp/coins
+homework/627/a
 *.o
 *.out
 *.exe
